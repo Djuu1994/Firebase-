@@ -1,0 +1,52 @@
+import React, { useState, useEffect } from "react";
+function Todo(props){
+
+    const [input, setInput] = useState("")
+    const [isEditing, setIsEditing] = useState(false)
+    
+
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+        props.editTodo(props.id, input)
+        setInput("")
+    }
+    const handleChange = (e) =>{
+        setInput(e.target.value)
+    }
+    
+    const defaultTemplate = (
+        <div>
+            <input 
+                type="checkbox" 
+                id={props.id}
+                defaultChecked={props.completed}
+                onChange={() => props.toggleCompleted(props.id)}
+                />
+                {props.desc}
+                
+                <div className="btn-group">
+                    <button type="button" onClick={()=>setIsEditing(true)}>Edit</button>
+                    <button type="button" onClick={()=> props.deleteTodo(props.id)}>Delete</button>
+                </div>
+        </div>
+    )
+    
+    
+    const editTemplate = (
+            <form onSubmit={(handleSubmit)}>
+                <label>New name for todo{props.desc}</label>
+                <input 
+                    type="text" 
+                    id={props.id} 
+                    onChange={handleChange}
+                    value={input}/>
+                <div className="btn-group">
+                    <button type="button" onClick={()=> setIsEditing(false)}>Cancel</button>
+                    <button type="submit">Save</button>
+                </div>
+            </form>       
+    )
+    return (<li>{isEditing ? editTemplate : defaultTemplate}</li>)
+  }
+
+  export default Todo
